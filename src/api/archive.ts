@@ -15,7 +15,7 @@ archiveRoutes.get('/archive', async (c) => {
     return c.json({ error: 'Authentication and active subscription required' }, 401)
   }
 
-  const db = createDb(c.env.DB)
+  const db = createDb(c.env.hirex_db)
   const allDigests = await db
     .select()
     .from(digests)
@@ -37,7 +37,7 @@ archiveRoutes.get('/archive/:digestId', async (c) => {
     return c.json({ error: 'Invalid digest ID' }, 400)
   }
 
-  const db = createDb(c.env.DB)
+  const db = createDb(c.env.hirex_db)
 
   const digest = await db
     .select()
@@ -82,7 +82,7 @@ archiveRoutes.get('/startups/:startupId', async (c) => {
     return c.json({ error: 'Invalid startup ID' }, 400)
   }
 
-  const db = createDb(c.env.DB)
+  const db = createDb(c.env.hirex_db)
 
   const startup = await db
     .select()

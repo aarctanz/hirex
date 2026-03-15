@@ -1,8 +1,8 @@
 export interface Env {
-  DB: D1Database
-  CANDIDATE_FUNDING_QUEUE: Queue
-  STARTUP_ENRICHMENT_QUEUE: Queue
-  BROWSER: Fetcher
+  hirex_db: D1Database
+  candidate_funding_items: Queue
+  startup_enrichment_jobs: Queue
+  AI: Ai
   RESEND_API_KEY: string
   SESSION_SECRET: string
   SOURCE_POLLER_AGENT: DurableObjectNamespace

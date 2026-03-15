@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { getArchive } from '../lib/api'
-import DigestCard from '../components/DigestCard'
+import { getArchive } from '@/lib/api'
+import DigestCard from '@/components/DigestCard'
 import type { DigestSummary } from '../../../src/types'
 
 export default function Archive() {
@@ -15,16 +15,17 @@ export default function Archive() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p className="text-gray-400">Loading…</p>
-  if (error) return <p className="text-red-600">{error}</p>
+  if (loading) return <p className="text-muted-foreground">Loading...</p>
+  if (error) return <p className="text-destructive">{error}</p>
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Digest Archive</h1>
+    <div className="mx-auto max-w-2xl">
+      <h1 className="text-2xl font-bold">Digest Archive</h1>
+      <p className="mt-1 text-sm text-muted-foreground">Past weekly digests and all discovered startups.</p>
       {digests.length === 0 ? (
-        <p className="text-gray-500">No digests yet. Check back after the first digest is sent.</p>
+        <p className="mt-6 text-muted-foreground">No digests yet. Check back after the first digest is sent.</p>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="mt-6 flex flex-col gap-3">
           {digests.map((d) => (
             <DigestCard key={d.id} digest={d} />
           ))}

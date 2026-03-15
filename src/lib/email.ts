@@ -36,7 +36,7 @@ export async function sendWelcomeEmail(env: Env, email: string): Promise<void> {
     subject: 'Welcome to HIREX — Funding to Opportunity Tracker',
     html: `
       <h1>Welcome to HIREX!</h1>
-      <p>You're now subscribed to the biweekly startup funding digest.</p>
+      <p>You're now subscribed to the weekly startup funding digest.</p>
       <p>Every two weeks you'll receive a curated list of the top 10 recently funded startups,
          along with hiring signals and outreach contacts.</p>
       <p>You can access the full archive at any time by logging in with your email.</p>

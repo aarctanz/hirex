@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getArchiveDetail } from '../lib/api'
-import StartupCard from '../components/StartupCard'
+import { ArrowLeft } from 'lucide-react'
+import { getArchiveDetail } from '@/lib/api'
+import { Button } from '@/components/ui/button'
+import StartupCard from '@/components/StartupCard'
 import type { ArchiveDetailResponse } from '../../../src/types'
 
 export default function ArchiveDetail() {
@@ -18,8 +20,8 @@ export default function ArchiveDetail() {
       .finally(() => setLoading(false))
   }, [digestId])
 
-  if (loading) return <p className="text-gray-400">Loading…</p>
-  if (error) return <p className="text-red-600">{error}</p>
+  if (loading) return <p className="text-muted-foreground">Loading...</p>
+  if (error) return <p className="text-destructive">{error}</p>
   if (!data) return null
 
   const { digest, topItems, otherItems } = data
@@ -27,17 +29,19 @@ export default function ArchiveDetail() {
   const end = new Date(digest.periodEnd).toLocaleDateString()
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <Link to="/archive" className="text-sm text-gray-400 hover:underline mb-4 inline-block">
-        ← Archive
-      </Link>
-      <h1 className="text-2xl font-bold mb-1">{digest.subject}</h1>
-      <p className="text-sm text-gray-500 mb-6">
-        {start} – {end} · {digest.totalFoundCount} startups found
+    <div className="mx-auto max-w-2xl">
+      <Button variant="ghost" size="sm" className="mb-4" asChild>
+        <Link to="/archive">
+          <ArrowLeft className="mr-1 h-4 w-4" /> Archive
+        </Link>
+      </Button>
+      <h1 className="text-2xl font-bold">{digest.subject}</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {start} &ndash; {end} &middot; {digest.totalFoundCount} startups found
       </p>
 
-      <h2 className="text-lg font-semibold mb-3">Top {digest.topCount} in this digest</h2>
-      <div className="flex flex-col gap-3 mb-8">
+      <h2 className="mt-8 text-lg font-semibold">Top {digest.topCount} in this digest</h2>
+      <div className="mt-3 flex flex-col gap-3">
         {topItems.map((item) => (
           <StartupCard
             key={item.startup.id}
@@ -50,10 +54,10 @@ export default function ArchiveDetail() {
 
       {otherItems.length > 0 && (
         <>
-          <h2 className="text-lg font-semibold mb-3">
+          <h2 className="mt-8 text-lg font-semibold">
             {otherItems.length} more startups found this period
           </h2>
-          <div className="flex flex-col gap-3">
+          <div className="mt-3 flex flex-col gap-3">
             {otherItems.map((item) => (
               <StartupCard
                 key={item.startup.id}

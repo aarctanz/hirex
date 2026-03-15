@@ -142,3 +142,10 @@ CREATE INDEX `idx_auth_otps_email` ON `auth_otps` (`email`);
 CREATE INDEX `idx_auth_otps_expires_at` ON `auth_otps` (`expires_at`);
 CREATE INDEX `idx_subscribers_email` ON `subscribers` (`email`);
 CREATE INDEX `idx_digest_items_digest_id` ON `digest_items` (`digest_id`);
+
+-- Seed initial sources (Tier 1)
+INSERT INTO `sources` (`name`, `type`, `url`, `enabled`, `poll_interval_minutes`, `created_at`, `updated_at`)
+VALUES
+  ('TechCrunch', 'rss', 'https://techcrunch.com/feed/', 1, 1440, strftime('%s', 'now'), strftime('%s', 'now')),
+  ('Hacker News', 'api', 'https://hn.algolia.com/api/v1', 1, 1440, strftime('%s', 'now'), strftime('%s', 'now')),
+  ('Y Combinator Blog', 'rss', 'https://www.ycombinator.com/blog/rss/', 1, 1440, strftime('%s', 'now'), strftime('%s', 'now'));

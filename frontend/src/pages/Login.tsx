@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { requestOtp, verifyOtp } from '../lib/api'
+import { requestOtp, verifyOtp } from '@/lib/api'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -39,64 +43,66 @@ export default function Login() {
   }
 
   return (
-    <div className="max-w-sm mx-auto py-20">
-      <h1 className="text-2xl font-bold mb-6">Login</h1>
-      {step === 'email' ? (
-        <form onSubmit={handleRequestOtp} className="flex flex-col gap-4">
-          <label className="text-sm font-medium">
-            Email address
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="mt-1 w-full rounded border px-3 py-2 text-sm"
-              placeholder="you@example.com"
-            />
-          </label>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="rounded bg-black px-4 py-2 text-white text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
-          >
-            {loading ? 'Sending…' : 'Send code'}
-          </button>
-        </form>
-      ) : (
-        <form onSubmit={handleVerifyOtp} className="flex flex-col gap-4">
-          <p className="text-sm text-gray-500">
-            We sent a 6-digit code to <strong>{email}</strong>.
-          </p>
-          <label className="text-sm font-medium">
-            One-time code
-            <input
-              type="text"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              required
-              maxLength={6}
-              className="mt-1 w-full rounded border px-3 py-2 text-sm tracking-widest"
-              placeholder="123456"
-            />
-          </label>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="rounded bg-black px-4 py-2 text-white text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
-          >
-            {loading ? 'Verifying…' : 'Verify'}
-          </button>
-          <button
-            type="button"
-            onClick={() => { setStep('email'); setOtp(''); setError(null) }}
-            className="text-sm text-gray-500 hover:underline"
-          >
-            Use a different email
-          </button>
-        </form>
-      )}
+    <div className="mx-auto max-w-sm py-20">
+      <Card>
+        <CardHeader>
+          <CardTitle>Login</CardTitle>
+          <CardDescription>
+            {step === 'email'
+              ? 'Enter your email to receive a one-time code.'
+              : `We sent a 6-digit code to ${email}.`}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {step === 'email' ? (
+            <form onSubmit={handleRequestOtp} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+              {error && <p className="text-sm text-destructive">{error}</p>}
+              <Button className="w-full" disabled={loading}>
+                {loading ? 'Sending...' : 'Send code'}
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleVerifyOtp} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="otp">One-time code</Label>
+                <Input
+                  id="otp"
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="123456"
+                  maxLength={6}
+                  className="tracking-widest"
+                  required
+                />
+              </div>
+              {error && <p className="text-sm text-destructive">{error}</p>}
+              <Button className="w-full" disabled={loading}>
+                {loading ? 'Verifying...' : 'Verify'}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full"
+                onClick={() => { setStep('email'); setOtp(''); setError(null) }}
+              >
+                Use a different email
+              </Button>
+            </form>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

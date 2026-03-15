@@ -9,7 +9,7 @@ directory = "./frontend/dist"
 [[d1_databases]]
 binding = "hirex_db"
 database_name = "hirex-db"
-database_id = "18426203-adba-4425-a6ba-a82aaae9fabf"
+database_id = "placeholder"
 
 [[queues.producers]]
 queue = "candidate-funding-items"
@@ -29,8 +29,7 @@ queue = "startup-enrichment-jobs"
 max_batch_size = 5
 max_retries = 3
 
-[ai]
-binding = "AI"
+# AI binding omitted — not available in local miniflare
 
 [[durable_objects.bindings]]
 name = "SOURCE_POLLER_AGENT"
@@ -51,9 +50,3 @@ class_name = "DigestAgent"
 [[migrations]]
 tag = "v1"
 new_classes = ["SourcePollerAgent", "FundingExtractionAgent", "StartupEnrichmentAgent", "DigestAgent"]
-
-[triggers]
-crons = [
-  "0 0 * * *",
-  "0 9 * * 1"
-]

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getSession } from '../lib/api'
+import { getSession } from '@/lib/api'
 
 export interface AuthState {
   loading: boolean

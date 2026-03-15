@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
-import { logout } from '../lib/api'
+import { useAuth } from '@/hooks/useAuth'
+import { logout } from '@/lib/api'
+import { Button } from '@/components/ui/button'
 
 export default function Navbar() {
   const { authenticated, subscribed, email, refresh } = useAuth()
@@ -11,44 +12,38 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="border-b px-4 py-3">
-      <div className="container mx-auto flex items-center justify-between">
+    <nav className="border-b">
+      <div className="container flex h-14 items-center justify-between">
         <Link to="/" className="text-xl font-bold tracking-tight">
           HIREX
         </Link>
-        <div className="flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-3">
           {authenticated && subscribed && (
-            <Link to="/archive" className="hover:underline">
-              Archive
-            </Link>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/archive">Archive</Link>
+            </Button>
           )}
           {!authenticated ? (
             <>
-              <Link to="/login" className="hover:underline">
-                Login
-              </Link>
-              <Link
-                to="/subscribe"
-                className="rounded bg-black px-3 py-1 text-white hover:bg-gray-800"
-              >
-                Subscribe
-              </Link>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/login">Login</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link to="/subscribe">Subscribe</Link>
+              </Button>
             </>
           ) : (
-            <div className="flex items-center gap-3">
-              <span className="text-gray-500">{email}</span>
+            <>
+              <span className="text-sm text-muted-foreground">{email}</span>
               {!subscribed && (
-                <Link
-                  to="/subscribe"
-                  className="rounded bg-black px-3 py-1 text-white hover:bg-gray-800"
-                >
-                  Subscribe
-                </Link>
+                <Button size="sm" asChild>
+                  <Link to="/subscribe">Subscribe</Link>
+                </Button>
               )}
-              <button onClick={handleLogout} className="hover:underline">
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
                 Logout
-              </button>
-            </div>
+              </Button>
+            </>
           )}
         </div>
       </div>

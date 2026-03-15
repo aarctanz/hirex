@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getStartup } from '../lib/api'
+import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { getStartup } from '@/lib/api'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { StartupDetailResponse } from '../../../src/types'
 
 export default function StartupDetail() {
@@ -17,79 +21,91 @@ export default function StartupDetail() {
       .finally(() => setLoading(false))
   }, [startupId])
 
-  if (loading) return <p className="text-gray-400">Loading…</p>
-  if (error) return <p className="text-red-600">{error}</p>
+  if (loading) return <p className="text-muted-foreground">Loading...</p>
+  if (error) return <p className="text-destructive">{error}</p>
   if (!data) return null
 
   const { startup, fundingEvent, enrichment } = data
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <Link to="/archive" className="text-sm text-gray-400 hover:underline mb-4 inline-block">
-        ← Archive
-      </Link>
+    <div className="mx-auto max-w-2xl">
+      <Button variant="ghost" size="sm" className="mb-4" asChild>
+        <Link to="/archive">
+          <ArrowLeft className="mr-1 h-4 w-4" /> Archive
+        </Link>
+      </Button>
 
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{startup.canonicalName}</h1>
-          {startup.category && (
-            <p className="text-sm text-gray-500 mt-0.5">{startup.category}</p>
-          )}
-          {startup.headquarters && (
-            <p className="text-sm text-gray-400">{startup.headquarters}</p>
-          )}
+          <div className="mt-1 flex items-center gap-2">
+            {startup.category && <Badge variant="secondary">{startup.category}</Badge>}
+            {startup.headquarters && (
+              <span className="text-sm text-muted-foreground">{startup.headquarters}</span>
+            )}
+          </div>
         </div>
         {startup.websiteUrl && (
-          <a
-            href={startup.websiteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-blue-600 hover:underline shrink-0"
-          >
-            Website ↗
-          </a>
+          <Button variant="outline" size="sm" asChild>
+            <a href={startup.websiteUrl} target="_blank" rel="noopener noreferrer">
+              Website <ExternalLink className="ml-1 h-3 w-3" />
+            </a>
+          </Button>
         )}
       </div>
 
       {fundingEvent && (
-        <section className="mt-6">
-          <h2 className="text-lg font-semibold mb-2">Funding</h2>
-          <div className="rounded border p-4 text-sm space-y-1">
-            {fundingEvent.roundType && <p><span className="font-medium">Round:</span> {fundingEvent.roundType}</p>}
-            {fundingEvent.amountText && <p><span className="font-medium">Amount:</span> {fundingEvent.amountText}</p>}
-            {fundingEvent.announcedAt && (
-              <p><span className="font-medium">Announced:</span> {new Date(fundingEvent.announcedAt).toLocaleDateString()}</p>
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="text-base">Funding</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 text-sm">
+            {fundingEvent.roundType && (
+              <p><span className="font-medium">Round:</span> {fundingEvent.roundType}</p>
             )}
-            {fundingEvent.summary && <p className="text-gray-600 pt-1">{fundingEvent.summary}</p>}
+            {fundingEvent.amountText && (
+              <p><span className="font-medium">Amount:</span> {fundingEvent.amountText}</p>
+            )}
+            {fundingEvent.announcedAt && (
+              <p>
+                <span className="font-medium">Announced:</span>{' '}
+                {new Date(fundingEvent.announcedAt).toLocaleDateString()}
+              </p>
+            )}
+            {fundingEvent.summary && (
+              <p className="text-muted-foreground">{fundingEvent.summary}</p>
+            )}
             <a
               href={fundingEvent.sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline text-xs"
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
             >
-              Source: {fundingEvent.sourceName} ↗
+              Source: {fundingEvent.sourceName} <ExternalLink className="h-3 w-3" />
             </a>
-          </div>
-        </section>
+          </CardContent>
+        </Card>
       )}
 
       {enrichment && (
-        <section className="mt-6">
-          <h2 className="text-lg font-semibold mb-2">Hiring & Outreach</h2>
-          <div className="rounded border p-4 text-sm space-y-2">
+        <Card className="mt-4">
+          <CardHeader>
+            <CardTitle className="text-base">Hiring & Outreach</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
             {enrichment.careersUrl && (
               <p>
                 <span className="font-medium">Careers:</span>{' '}
-                <a href={enrichment.careersUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                  {enrichment.careersUrl} ↗
+                <a href={enrichment.careersUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                  {enrichment.careersUrl}
                 </a>
               </p>
             )}
             {enrichment.jobsUrl && enrichment.jobsUrl !== enrichment.careersUrl && (
               <p>
                 <span className="font-medium">Jobs:</span>{' '}
-                <a href={enrichment.jobsUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                  {enrichment.jobsUrl} ↗
+                <a href={enrichment.jobsUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                  {enrichment.jobsUrl}
                 </a>
               </p>
             )}
@@ -97,23 +113,27 @@ export default function StartupDetail() {
               <p><span className="font-medium">Public email:</span> {enrichment.publicEmail}</p>
             )}
             {enrichment.bestFirstContactType && (
-              <div className="bg-gray-50 rounded p-3">
-                <p className="font-medium">Best first contact</p>
-                <p>{enrichment.bestFirstContactType}: {enrichment.bestFirstContactValue}</p>
-                {enrichment.bestFirstContactReason && (
-                  <p className="text-gray-500 text-xs mt-0.5">{enrichment.bestFirstContactReason}</p>
-                )}
-              </div>
+              <Card className="bg-muted">
+                <CardContent className="p-3">
+                  <p className="font-medium">Best first contact</p>
+                  <p>{enrichment.bestFirstContactType}: {enrichment.bestFirstContactValue}</p>
+                  {enrichment.bestFirstContactReason && (
+                    <p className="mt-0.5 text-xs text-muted-foreground">{enrichment.bestFirstContactReason}</p>
+                  )}
+                </CardContent>
+              </Card>
             )}
             <p>
-              <span className="font-medium">Hiring signal score:</span>{' '}
-              {enrichment.hiringSignalScore.toFixed(1)}
+              <span className="font-medium">Hiring signal:</span>{' '}
+              <Badge variant={enrichment.hiringSignalScore > 0.5 ? 'default' : 'secondary'}>
+                {enrichment.hiringSignalScore.toFixed(1)}
+              </Badge>
             </p>
             {enrichment.hiringNotes && (
-              <p className="text-gray-600">{enrichment.hiringNotes}</p>
+              <p className="text-muted-foreground">{enrichment.hiringNotes}</p>
             )}
-          </div>
-        </section>
+          </CardContent>
+        </Card>
       )}
     </div>
   )

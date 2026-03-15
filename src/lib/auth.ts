@@ -76,7 +76,7 @@ export async function validateSession(c: Context<{ Bindings: Env }>): Promise<Se
   const token = getSessionToken(c)
   if (!token) return null
 
-  const db = createDb(c.env.DB)
+  const db = createDb(c.env.hirex_db)
   const tokenHash = await hashSessionToken(token)
   const now = new Date()
 

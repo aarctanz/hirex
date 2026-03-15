@@ -15,7 +15,7 @@ subscribeRoutes.post('/subscribe', async (c) => {
     return c.json({ error: 'Authentication required' }, 401)
   }
 
-  const db = createDb(c.env.DB)
+  const db = createDb(c.env.hirex_db)
   const now = new Date()
   const { subscriber } = auth
 
@@ -45,7 +45,7 @@ subscribeRoutes.post('/unsubscribe', async (c) => {
     return c.json({ error: 'Authentication required' }, 401)
   }
 
-  const db = createDb(c.env.DB)
+  const db = createDb(c.env.hirex_db)
   await db
     .update(subscribers)
     .set({ isActive: false, unsubscribedAt: new Date() })

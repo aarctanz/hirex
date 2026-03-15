@@ -34,7 +34,7 @@ authRoutes.post('/request-otp', async (c) => {
     return c.json({ error: 'Invalid email address' }, 400)
   }
 
-  const db = createDb(c.env.DB)
+  const db = createDb(c.env.hirex_db)
   const now = new Date()
 
   // Rate limit: one OTP per minute per email
@@ -86,7 +86,7 @@ authRoutes.post('/verify-otp', async (c) => {
     return c.json({ error: 'Email and OTP are required' }, 400)
   }
 
-  const db = createDb(c.env.DB)
+  const db = createDb(c.env.hirex_db)
   const now = new Date()
 
   const record = await db
@@ -148,7 +148,7 @@ authRoutes.post('/verify-otp', async (c) => {
 authRoutes.post('/logout', async (c) => {
   const auth = await validateSession(c)
   if (auth) {
-    const db = createDb(c.env.DB)
+    const db = createDb(c.env.hirex_db)
     await db.delete(sessions).where(eq(sessions.id, auth.session.id))
   }
   clearSessionCookie(c)
@@ -162,7 +162,7 @@ authRoutes.get('/session', async (c) => {
     return c.json<SessionResponse>({ authenticated: false, subscribed: false, email: null })
   }
 
-  const db = createDb(c.env.DB)
+  const db = createDb(c.env.hirex_db)
   await db
     .update(sessions)
     .set({ lastSeenAt: new Date() })

@@ -28,7 +28,7 @@ export default function StartupDetail() {
   const { startup, fundingEvent, enrichment } = data
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div>
       <Button variant="ghost" size="sm" className="mb-4" asChild>
         <Link to="/archive">
           <ArrowLeft className="mr-1 h-4 w-4" /> Archive

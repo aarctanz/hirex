@@ -19,7 +19,7 @@ export default function Archive() {
   if (error) return <p className="text-destructive">{error}</p>
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div>
       <h1 className="text-2xl font-bold">Digest Archive</h1>
       <p className="mt-1 text-sm text-muted-foreground">Past weekly digests and all discovered startups.</p>
       {digests.length === 0 ? (

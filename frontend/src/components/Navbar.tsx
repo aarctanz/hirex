@@ -13,7 +13,7 @@ export default function Navbar() {
 
   return (
     <nav className="border-b">
-      <div className="container flex h-14 items-center justify-between">
+      <div className="mx-auto flex h-14 max-w-225 items-center justify-between px-6">
         <Link to="/" className="text-xl font-bold tracking-tight">
           HIREX
         </Link>

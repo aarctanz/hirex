@@ -1,0 +1,59 @@
+name = "hirex"
+main = "src/index.ts"
+compatibility_date = "2025-03-15"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./frontend/dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "hirex-db"
+database_id = "placeholder"
+
+[[queues.producers]]
+binding = "CANDIDATE_FUNDING_QUEUE"
+queue = "candidate-funding-items"
+
+[[queues.producers]]
+binding = "STARTUP_ENRICHMENT_QUEUE"
+queue = "startup-enrichment-jobs"
+
+[[queues.consumers]]
+queue = "candidate-funding-items"
+max_batch_size = 10
+max_retries = 3
+
+[[queues.consumers]]
+queue = "startup-enrichment-jobs"
+max_batch_size = 5
+max_retries = 3
+
+[browser]
+binding = "BROWSER"
+
+[[durable_objects.bindings]]
+name = "SOURCE_POLLER_AGENT"
+class_name = "SourcePollerAgent"
+
+[[durable_objects.bindings]]
+name = "FUNDING_EXTRACTION_AGENT"
+class_name = "FundingExtractionAgent"
+
+[[durable_objects.bindings]]
+name = "STARTUP_ENRICHMENT_AGENT"
+class_name = "StartupEnrichmentAgent"
+
+[[durable_objects.bindings]]
+name = "DIGEST_AGENT"
+class_name = "DigestAgent"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["SourcePollerAgent", "FundingExtractionAgent", "StartupEnrichmentAgent", "DigestAgent"]
+
+[triggers]
+crons = [
+  "0 0 * * *",
+  "0 9 * * 1"
+]

@@ -1,0 +1,40 @@
+{
+  "name": "hirex",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"wrangler dev\" \"vite frontend\"",
+    "build": "vite build --config frontend/vite.config.ts && wrangler deploy --dry-run",
+    "deploy": "vite build --config frontend/vite.config.ts && wrangler deploy",
+    "db:migrate": "wrangler d1 migrations apply hirex-db",
+    "db:generate": "drizzle-kit generate",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cloudflare/agents": "^0.0.16",
+    "drizzle-orm": "^0.38.3",
+    "hono": "^4.7.4",
+    "resend": "^4.2.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.33",
+    "@cloudflare/workers-types": "^4.20250214.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "concurrently": "^9.1.2",
+    "drizzle-kit": "^0.30.4",
+    "lucide-react": "^0.474.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.2.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0",
+    "vitest": "^2.1.9",
+    "wrangler": "^3.109.3"
+  }
+}
